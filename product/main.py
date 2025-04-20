@@ -1,21 +1,10 @@
-from fastapi import FastAPI, HTTPException
-from fastapi import Depends
-from sqlalchemy.orm import Session
-from .import schemas
+from fastapi import FastAPI
 from .import models
-from .database import engine,get_db
-from fastapi import status
-from routers import product
-
-from passlib.context import CryptContext # to create the context and hash mechanism
+from .database import engine
+from routers import product, seller
 
 models.Base.metadata.create_all(engine)
 
-
-pwd_context = CryptContext(schemes=["bcrypt"])
-
-
-from fastapi import FastAPI
 
 app = FastAPI(
     title="Products API",
@@ -35,6 +24,8 @@ app = FastAPI(
 )
 
 app.include_router(product.router)
+app.include_router(seller.router)
+
 
 
 @app.get("/")
@@ -46,15 +37,3 @@ def healthcheck():
     return {"status": "ok"}
 
 
-@app.post('/seller', response_model=schemas.DisplaySeller, tags=['Sellers'])
-def create_seller(request: schemas.Seller, db: Session = Depends(get_db)):
-    hashed_pwd = pwd_context.hash(request.password)
-    new_seller = models.Seller(
-        username=request.username,
-        email=request.email,
-        password=hashed_pwd
-    )
-    db.add(new_seller)
-    db.commit()
-    db.refresh(new_seller)
-    return new_seller
