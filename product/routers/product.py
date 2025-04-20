@@ -4,9 +4,10 @@ from fastapi.params import Depends
 from ..database import get_db
 from ..import models, schemas
 from typing import List
+
+
+
 router = APIRouter()
-
-
 
 
 @router.get('/products', response_model=List[schemas.DisplayProduct], tags=['Products'])

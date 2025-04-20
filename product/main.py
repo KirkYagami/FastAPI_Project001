@@ -5,7 +5,7 @@ from .import schemas
 from .import models
 from .database import engine,get_db
 from fastapi import status
-
+from routers import product
 
 from passlib.context import CryptContext # to create the context and hash mechanism
 
@@ -34,6 +34,7 @@ app = FastAPI(
     # redoc_url=None
 )
 
+app.include_router(product.router)
 
 
 @app.get("/")
@@ -57,4 +58,3 @@ def create_seller(request: schemas.Seller, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_seller)
     return new_seller
-
