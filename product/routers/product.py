@@ -7,10 +7,12 @@ from typing import List
 
 
 
-router = APIRouter()
+router = APIRouter(
+    tags=['Products']
+)
 
 
-@router.get('/products', response_model=List[schemas.DisplayProduct], tags=['Products'])
+@router.get('/products', response_model=List[schemas.DisplayProduct])
 def products(db: Session = Depends(get_db)):
     products = db.query(models.Product).all()
     return products
@@ -23,7 +25,7 @@ def products(db: Session = Depends(get_db)):
 #     return product
 
 
-@router.get('/product/{id}', response_model=schemas.DisplayProduct, tags=['Products'])
+@router.get('/product/{id}', response_model=schemas.DisplayProduct)
 def product(id: int, db: Session = Depends(get_db)):
     product = db.query(models.Product).filter(models.Product.id == id).first()
     if not product:
@@ -37,14 +39,14 @@ def product(id: int, db: Session = Depends(get_db)):
 
 
 
-@router.delete('/product/{id}', tags=['Products'])
+@router.delete('/product/{id}')
 def delete(id, db: Session = Depends(get_db)):
     db.query(models.Product).filter(models.Product.id==id).delete(synchronize_session=False)
     db.commit()
     return {f'Deleted: Product with id :- {id}'}
 
 
-@router.put('/product/{id}', status_code=status.HTTP_201_CREATED, tags=['Products'])
+@router.put('/product/{id}', status_code=status.HTTP_201_CREATED)
 def update(id, request: schemas.Product, db: Session = Depends(get_db) ):
     product = db.query(models.Product).filter(models.Product.id==id)
     if not product.first():
@@ -55,7 +57,7 @@ def update(id, request: schemas.Product, db: Session = Depends(get_db) ):
         return {'Updated product !'}
 
 
-@router.post('/product',status_code=status.HTTP_201_CREATED, response_model=schemas.DisplayProduct, tags=['Products'])
+@router.post('/product',status_code=status.HTTP_201_CREATED, response_model=schemas.DisplayProduct)
 def add(request: schemas.Product, db: Session = Depends(get_db)):
     new_product = models.Product(
         name=request.name, 
