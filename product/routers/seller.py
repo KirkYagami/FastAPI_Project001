@@ -7,7 +7,7 @@ from passlib.context import CryptContext
 
 router = APIRouter(
     tags=["Sellers"],
-    prefix='seller'
+    prefix='/seller'
 )
 
 
