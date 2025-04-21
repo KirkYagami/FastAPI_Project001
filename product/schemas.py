@@ -3,6 +3,7 @@ We will store all the pydantic schemas here
 """
 
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Seller(BaseModel):
@@ -39,3 +40,10 @@ class Login(BaseModel):
 
 
     
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str]=None

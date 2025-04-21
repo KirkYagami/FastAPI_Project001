@@ -25,3 +25,5 @@ def create_seller(request: schemas.Seller, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_seller)
     return new_seller
+
+
