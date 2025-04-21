@@ -4,7 +4,7 @@ from fastapi.params import Depends
 from ..database import get_db
 from ..import models, schemas
 from typing import List
-
+from product.routers.login import get_current_user
 
 
 router = APIRouter(
@@ -14,7 +14,7 @@ router = APIRouter(
 
 
 @router.get('/', response_model=List[schemas.DisplayProduct])
-def products(db: Session = Depends(get_db)):
+def products(db: Session = Depends(get_db), current_user:schemas.Seller=Depends(get_current_user)):
     products = db.query(models.Product).all()
     return products
 

@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, status, HTTPException
-from ..import schemas, database, models
+from ..import schemas, models
 from ..database import get_db
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from fastapi.security import OAuth2PasswordBearer
-
+from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 
 # created by: openssl rand -hex 32
 SECRET_KEY = "cfc8e7affd31d3756ff676539b489628a064f410bd3f2f0374ab0eba8eed69c9"
@@ -19,8 +19,6 @@ router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-
-
 def generate_token(data: dict):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -30,7 +28,7 @@ def generate_token(data: dict):
 
 
 @router.post('/login')
-def login(request: schemas.Login, db: Session = Depends(get_db)):
+def login(request:OAuth2PasswordRequestForm=Depends() , db: Session = Depends(get_db)):
     seller = db.query(models.Seller).filter(models.Seller.username==request.username).first()
     if not seller:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="username is not in our db.")
