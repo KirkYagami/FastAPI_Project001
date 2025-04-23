@@ -19,7 +19,6 @@ def products(db: Session = Depends(get_db), current_user:schemas.Seller=Depends(
     return products
 
 
-
 # @router.get('/product/{id}', response_model=schemas.DisplayProduct)
 # def product(id, db: Session = Depends(get_db)):
 #     product = db.query(models.Product).filter(models.Product.id==id).first()
@@ -35,9 +34,6 @@ def product(id: int, db: Session = Depends(get_db)):
             detail='Product not found'
         )
     return product
-
-
-
 
 
 @router.delete('/{id}')

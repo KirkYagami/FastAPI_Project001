@@ -25,6 +25,12 @@ class Product(BaseModel):
     price: int
 
 
+class DisplayProductv2(BaseModel):
+    name: str
+    description: str
+
+
+
 class DisplayProduct(BaseModel):
     name: str
     description: str

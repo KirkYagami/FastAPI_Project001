@@ -9,5 +9,7 @@ COPY . .
 
 
 CMD ["python", "main.py"]
-
 # Alternative: CMD ["uvicorn", "product.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+
+# https://fastapi.tiangolo.com/deployment/docker/
